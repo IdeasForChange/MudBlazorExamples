@@ -1,0 +1,48 @@
+﻿@using EnterpriseAppFluxor.Features.Globals.Store
+@using Fluxor
+@using MudBlazor
+
+@inject IDispatcher Dispatcher
+@inject IState<AppState> State
+
+<MudSelect T="BatchDto" 
+           Label="Select Batch" 
+           @bind-SelectedItem="SelectedBatch" 
+           ToStringFunc="GetBatchDisplayText" >
+
+    @foreach (var batch in State.Value.Batches)
+    {
+        <MudSelectItem Value="batch">@GetBatchDisplayText(batch)</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    private BatchDto? selectedBatch;
+
+    private BatchDto? SelectedBatch
+    {
+        get => State.Value.SelectedBatch;
+        set
+        {
+            if (value != selectedBatch)
+            {
+                selectedBatch = value;
+                Dispatcher.Dispatch(new SetSelectedBatchAction(value));
+            }
+        }
+    }
+
+    private string GetBatchDisplayText(BatchDto? batch)
+    {
+        if (batch == null)
+            return string.Empty;
+
+        return $"{batch.BatchDate:yyyy-MM-dd} - {batch.BatchType} - {batch.BatchId}";
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Ensure the dropdown reflects the selected batch from the state
+        SelectedBatch = State.Value.SelectedBatch;
+    }
+}

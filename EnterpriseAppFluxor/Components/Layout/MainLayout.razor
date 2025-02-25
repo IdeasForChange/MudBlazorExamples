@@ -1,0 +1,76 @@
+﻿@inherits FluxorLayout
+@inject IApexChartService ApexChartService 
+@using ApexCharts
+@using Fluxor.Blazor.Web.Components
+@using MudBlazor
+
+@* Required *@
+<MudThemeProvider @rendermode="InteractiveServer" />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider  />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="25">
+        <MudLink Href="/" Color="MudBlazor.Color.Inherit">Harmony</MudLink>
+        <MudToolBar DisableGutters="true">
+            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="MudBlazor.Color.Inherit" Class="ml-3" />
+        </MudToolBar>
+        <MudSpacer />
+        <MudSwitch Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" />
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="MudBlazor.Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+
+    <MudDrawer Variant="@DrawerVariant.Persistent" Elevation="5">
+        <NavMenu />
+    </MudDrawer>
+
+    <MudContainer Class="d-flex align-center" Style="height: 100vh;">
+        @Body
+    </MudContainer>
+</MudLayout>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var globalOptions = new ApexChartBaseOptions
+            {
+                Debug = true,
+                Theme = new Theme { Mode = Mode.Light },
+                Xaxis = new XAxis { TickPlacement = TickPlacement.On },
+                Chart = new ApexCharts.Chart
+                {
+                    Width = "100%",
+                    Height = "100%",
+                    Background = "transparent",
+                    Toolbar = new ApexCharts.Toolbar()
+                    {
+                        Show = true,
+                        OffsetX = 0,
+                        OffsetY = 0,
+                        Tools = new ApexCharts.Tools()
+                        {
+                            Selection = true,
+                            Zoom = true,
+                            Zoomin = false,
+                            Zoomout = false,
+                            Pan = true,
+                            Download = true
+                        }
+                    }
+                }
+            };
+
+        await ApexChartService.SetGlobalOptionsAsync(globalOptions, true);
+    }
+}
