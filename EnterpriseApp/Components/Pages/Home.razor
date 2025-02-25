@@ -1,0 +1,31 @@
+﻿@page "/"
+@using EnterpriseApp.Components.Code
+@using EnterpriseApp.Components.Shared
+@using MudBlazor
+@inject DateStateService DateStateService
+
+<PageTitle>Home</PageTitle>
+
+<MudContainer>
+
+    <MudGrid>
+        <MudItem xs="6">
+            <DateControl />
+        </MudItem>
+        <MudItem xs="6">
+            <DropDownControl />
+        </MudItem>
+        <MudItem xs="6">
+            <DataControl />
+        </MudItem>
+        <MudItem xs="6">
+            <DataControl />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <ChartControl SeriesType="SeriesType.Bar" Title="Stock Price Trends" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <ChartControl SeriesType="SeriesType.Pie" />
+        </MudItem>
+    </MudGrid>
+</MudContainer>

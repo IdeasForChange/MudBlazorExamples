@@ -1,0 +1,41 @@
+﻿@using EnterpriseApp.Components.Code
+@using MudBlazor
+@inject DateStateService DateStateService
+@inject FakeDataService FakeDataService
+
+<MudPaper Elevation="4" Class="pa-4">
+    <MudText Typo="Typo.h6">Control Data for @DateStateService.SelectedDate?.ToShortDateString()</MudText>
+    <MudText>Selected Option: @DateStateService.SelectedDropdownValue</MudText>
+    <MudText>Data: @Data</MudText>
+</MudPaper>
+
+@code {
+    private string Data { get; set; } = "Loading...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Subscribe to global state changes
+        DateStateService.OnStateChanged += OnDateChangedHandler;
+        await RefreshData(); // Initial data load
+    }
+
+    private void OnDateChangedHandler()
+    {
+        // Call the async method and discard the returned Task
+        _ = RefreshData();
+    }
+
+    private async Task RefreshData()
+    {
+        // Fetch fake data based on the global state
+        var dataPoints = await FakeDataService.GetDataAsync(DateStateService.SelectedDate, DateStateService.SelectedDropdownValue);
+        Data = string.Join(", ", dataPoints.Select(d => $"{d.Label}: {d.Value}"));
+        StateHasChanged(); // Refresh the UI
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe to avoid memory leaks
+        DateStateService.OnStateChanged -= OnDateChangedHandler;
+    }
+}

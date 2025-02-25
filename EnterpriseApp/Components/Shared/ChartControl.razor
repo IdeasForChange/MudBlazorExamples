@@ -1,0 +1,70 @@
+﻿@using ApexCharts
+@using EnterpriseApp.Components.Code
+@inject DateStateService DateStateService
+@inject FakeDataService FakeDataService
+@implements IDisposable
+
+<MudPaper Height="400px" Width="100%" Elevation="4" Class="pa-2">
+
+    <ApexChart 
+    @ref="_chart"
+    TItem="DataPoint"
+    Title="@Title"
+    Options="@ChartOptions">
+
+
+        <ApexPointSeries 
+        TItem="DataPoint"
+        Items="Data"
+        Name="Net Profit"
+        SeriesType="@SeriesType"
+        XValue="e => e.Label"
+        YValue="e=> e.Value"
+        ShowDataLabels />
+
+    </ApexChart>
+
+</MudPaper>
+
+@code {
+    private List<DataPoint> Data = new();
+    private ApexChartOptions<DataPoint> ChartOptions = new();
+
+    [Parameter]
+    public SeriesType SeriesType { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    public required ApexChart<DataPoint> _chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Subscribe to date changes
+        DateStateService.OnStateChanged += OnDateChangedHandler;
+        await RefreshChart(); // Initial chart load
+    }
+
+    private void OnDateChangedHandler()
+    {
+        // Call the async method and discard the returned Task
+        _ = RefreshChart();
+    }
+
+    private async Task RefreshChart()
+    {
+        // Fetch fake data based on the selected date
+        Data = await FakeDataService.GetDataAsync(DateStateService.SelectedDate, DateStateService.SelectedDropdownValue);
+
+        //ChartOptions.Theme.Mode = IsDarkMode ? Mode.Dark : Mode.Light;
+
+        await InvokeAsync(StateHasChanged);
+        await _chart.UpdateSeriesAsync(true);
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe to avoid memory leaks
+        DateStateService.OnStateChanged -= OnDateChangedHandler;
+    }
+}

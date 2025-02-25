@@ -1,0 +1,36 @@
+﻿@using EnterpriseApp.Components.Code
+@using MudBlazor
+@inject DateStateService DateStateService
+
+<MudSelect T="string" 
+    @bind-Value="DateStateService.SelectedDropdownValue" 
+    Label="Select Option" 
+    Variant="Variant.Outlined"
+    Margin="Margin.Dense"
+    >
+    @foreach (var option in Options)
+    {
+        <MudSelectItem Value="option">@option</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    private List<string> Options { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch options based on the selected date
+        Options = await GetDropdownOptions(DateStateService.SelectedDate);
+
+        // Auto-select a value based on specific logic
+        DateStateService.SelectedDropdownValue = Options.FirstOrDefault(); // Example: Select the first option
+        StateHasChanged(); // Notify parent
+    }
+
+    private Task<List<string>> GetDropdownOptions(DateTime? date)
+    {
+        // Simulate fetching dropdown options based on the selected date
+        var options = new List<string> { "Option 1", "Option 2", "Option 3" };
+        return Task.FromResult(options);
+    }
+}
