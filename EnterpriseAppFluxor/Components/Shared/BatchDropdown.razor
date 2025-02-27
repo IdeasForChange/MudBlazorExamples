@@ -1,36 +1,40 @@
 ﻿@using EnterpriseAppFluxor.Features.Globals.Store
 @using Fluxor
+@using Fluxor.Blazor.Web.Components
 @using MudBlazor
 
+@inherits FluxorComponent
 @inject IDispatcher Dispatcher
 @inject IState<AppState> State
 
-<MudSelect T="BatchDto" 
-           Label="Select Batch" 
-           @bind-SelectedItem="SelectedBatch" 
-           ToStringFunc="GetBatchDisplayText" >
 
-    @foreach (var batch in State.Value.Batches)
-    {
-        <MudSelectItem Value="batch">@GetBatchDisplayText(batch)</MudSelectItem>
-    }
-</MudSelect>
+<MudAutocomplete T="BatchDto"
+    Label="Select"
+    Variant="Variant.Outlined"
+    Dense="true"
+    Margin="Margin.Dense"
+    @bind-Value="_selectedBatch"
+    SearchFunc="@BatchDataSearch"
+    ToStringFunc="@GetBatchDisplayText"
+    ResetValueOnEmptyText="true" />
+
+    <MudSelect T="BatchDto"
+                     Label="Select"
+                     Variant="Variant.Outlined"
+                     Dense="true"
+                     Margin="Margin.Dense"
+                     @bind-Value="_selectedBatch"
+                     ToStringFunc="@GetBatchDisplayText" >
+        @foreach (var batch in State.Value.Batches)
+        {
+            <MudSelectItem Value="batch" />
+        }
+    </MudSelect>
+
 
 @code {
-    private BatchDto? selectedBatch;
-
-    private BatchDto? SelectedBatch
-    {
-        get => State.Value.SelectedBatch;
-        set
-        {
-            if (value != selectedBatch)
-            {
-                selectedBatch = value;
-                Dispatcher.Dispatch(new SetSelectedBatchAction(value));
-            }
-        }
-    }
+    public BatchDto? SelectedBatch => _selectedBatch;
+    private BatchDto? _selectedBatch { get; set; }
 
     private string GetBatchDisplayText(BatchDto? batch)
     {
@@ -40,9 +44,35 @@
         return $"{batch.BatchDate:yyyy-MM-dd} - {batch.BatchType} - {batch.BatchId}";
     }
 
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
-        // Ensure the dropdown reflects the selected batch from the state
-        SelectedBatch = State.Value.SelectedBatch;
+        SubscribeToAction<SetSelectedBatchAction>(OnSetSelectedBatch);
+
+        if (!State.Value.Batches.Any())
+        {
+            Dispatcher.Dispatch(new SetSelectedDateAction(State.Value.SelectedDate));
+        }
+        base.OnInitialized();
     }
+
+    private void OnSetSelectedBatch(SetSelectedBatchAction action)
+    {
+        _selectedBatch = action.SelectedBatch;
+    }
+
+    private async Task<IEnumerable<BatchDto>> BatchDataSearch(string value, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return State.Value.Batches;
+        }
+
+        return State.Value.Batches
+            .Where(x => x.BatchDate.Equals(value) ||
+                        x.BatchId.Equals(value, StringComparison.InvariantCultureIgnoreCase) || 
+                        x.BatchType.ToString().Equals(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
 }

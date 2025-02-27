@@ -8,11 +8,25 @@ public record ComplexObject
     public string Name { get; init; } = string.Empty;
 }
 
-public record DropdownState
+public record DropdownState 
 {
     public bool IsLoading { get; init; }
     public IEnumerable<ComplexObject> Items { get; init; } = [];
     public ComplexObject? SelectedItem { get; init; }
+}
+
+public class DropdownStateFeature : Feature<DropdownState>
+{
+    public override string GetName() => "DropdownState";
+    protected override DropdownState GetInitialState()
+    {
+        return new DropdownState
+        {
+            IsLoading = false,
+            Items = [],
+            SelectedItem = null
+        };
+    }
 }
 
 // Actions
@@ -59,5 +73,8 @@ public class DropdownEffects
     {
         var items = await _service.GetComplexObjectsAsync();
         dispatcher.Dispatch(new DropdownDataLoadedAction(items));
+
+        var selectedItem = items.First();
+        dispatcher.Dispatch(new SetSelectedItemAction(selectedItem));
     }
 }

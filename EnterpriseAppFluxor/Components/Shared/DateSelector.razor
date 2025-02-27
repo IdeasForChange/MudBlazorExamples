@@ -1,12 +1,15 @@
 ﻿@using EnterpriseAppFluxor.Features.Globals.Store
 @using Fluxor
+@using Fluxor.Blazor.Web.Components
 @using MudBlazor
+
+@inherits FluxorComponent
 @inject IDispatcher Dispatcher
 @inject IState<AppState> State
 
 <MudDatePicker Label="Select Date" 
-               @bind-Date="SelectedDate" 
-               DateFormat="yyyy-MM-dd" />
+@bind-Date="SelectedDate" 
+DateFormat="yyyy-MM-dd" />
 
 @code {
     private DateTime? selectedDate;
@@ -29,6 +32,7 @@
 
     protected override void OnInitialized()
     {
+        base.OnInitialized();
         // Set the default date to yesterday on startup
         selectedDate = DateTime.Now.AddDays(-1);
         Dispatcher.Dispatch(new SetSelectedDateAction(selectedDate.Value));

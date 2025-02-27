@@ -1,31 +1,74 @@
 ﻿@using EnterpriseAppFluxor.Features.Dropdowns.Store
 @using Fluxor
+@using Fluxor.Blazor.Web.Components
 @using MudBlazor
+
+@inherits FluxorComponent
 @inject IDispatcher Dispatcher
 @inject IState<DropdownState> DropdownState
 
-<MudSelect T="ComplexObject" Label="Select an item" @bind-SelectedItem="_selectedItem">
-    @foreach (var item in DropdownState.Value.Items)
-    {
-        <MudSelectItem Value="item">@item.Name</MudSelectItem>
-    }
-</MudSelect>
+<MudAutocomplete T="ComplexObject"
+Label="Select"
+Variant="Variant.Outlined"
+Dense="true"
+Margin="Margin.Dense"
+@bind-Value="_selectedItem"     
+SearchFunc="@DataSearch"
+ToStringFunc="@( c => c == null ? null : $"{c.Name}")"
+ResetValueOnEmptyText="true" />
+
 
 @code {
-    private ComplexObject? _selectedItem;
+    public ComplexObject? SelectedItem => _selectedItem;
+    private ComplexObject? _selectedItem { get; set; }
+
 
     protected override void OnInitialized()
     {
+        SubscribeToAction<DropdownDataLoadedAction>(OnDropdownDataLoaded);
+        SubscribeToAction<SetSelectedItemAction>(OnSetSelectedItem);
+
+        if (!DropdownState.Value.Items.Any())
+        {
+            Dispatcher.Dispatch(new LoadDropdownDataAction());
+        }
         base.OnInitialized();
-        Dispatcher.Dispatch(new LoadDropdownDataAction());
     }
 
-    protected override void OnParametersSet()
+    // public void Reset()
+    // {
+    //     _selectedItem = null;
+    //     StateHasChanged();
+    // }
+
+    // public void SetBatch(ComplexObject? _selectedItem)
+    // {
+    //     _selectedItem = _selectedItem == null ? DropdownState.Value.Items.First() : DropdownState.Value.Items.Single(x => x.Id == _selectedItem.Id);
+    //     Dispatcher.Dispatch(new SetSelectedItemAction(_selectedItem));
+    //     StateHasChanged();
+    // }
+
+    public void OnDropdownDataLoaded(DropdownDataLoadedAction item)
     {
-        base.OnParametersSet();
-        if (DropdownState.Value.Items != null && DropdownState.Value.SelectedItem != null)
+        var data = item.Items;
+        //SetBatch(DropdownState.Value.SelectedItem);
+    }
+
+    public void OnSetSelectedItem(SetSelectedItemAction item)
+    {
+        _selectedItem = item.SelectedItem;
+    }
+
+    private async Task<IEnumerable<ComplexObject>> DataSearch(string value, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+
+        if (string.IsNullOrEmpty(value))
         {
-            _selectedItem = DropdownState.Value.SelectedItem;
+            return DropdownState.Value.Items;
         }
+
+        return DropdownState.Value.Items
+            .Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 }

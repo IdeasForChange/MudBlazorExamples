@@ -53,12 +53,10 @@ public class Effects(IBatchService batchService)
     {
         // Fetch batches for the selected date
         var batches = await batchService.GetBatchesAsync(action.SelectedDate);
+        dispatcher.Dispatch(new SetBatchesAction(batches));
 
         // Find the "Final" batch
         var finalBatch = batches.FirstOrDefault(b => b.BatchType == BatchType.Final);
-
-        // Dispatch actions to update the state
-        dispatcher.Dispatch(new SetBatchesAction(batches));
         dispatcher.Dispatch(new SetSelectedBatchAction(finalBatch));
     }
 }
