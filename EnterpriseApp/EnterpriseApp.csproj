@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\EnterpriseAppFluxor\Components\Pages\DropdownDown.razor" Link="DropdownDown.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazor-ApexCharts" Version="5.1.0" />
     <PackageReference Include="MudBlazor" Version="8.3.0" />
     <PackageReference Include="MudBlazor.FontIcons.MaterialIcons" Version="1.2.0" />

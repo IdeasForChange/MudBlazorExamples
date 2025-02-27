@@ -1,6 +1,7 @@
 using ApexCharts;
 using EnterpriseAppFluxor.Components;
 using EnterpriseAppFluxor.Components.Code;
+using EnterpriseAppFluxor.Features.Dropdowns.Store;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
 using MudBlazor.Services;
@@ -26,6 +27,7 @@ namespace EnterpriseAppFluxor
             });
 
             builder.Services.AddScoped<IBatchService, FakeBatchService>();
+            builder.Services.AddScoped<IComplexObjectService, ComplexObjectService>();
 
             var app = builder.Build();
 

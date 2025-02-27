@@ -1,0 +1,31 @@
+﻿@using EnterpriseAppFluxor.Features.Dropdowns.Store
+@using Fluxor
+@using MudBlazor
+@inject IDispatcher Dispatcher
+@inject IState<DropdownState> DropdownState
+
+<MudSelect T="ComplexObject" Label="Select an item" @bind-SelectedItem="_selectedItem">
+    @foreach (var item in DropdownState.Value.Items)
+    {
+        <MudSelectItem Value="item">@item.Name</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    private ComplexObject? _selectedItem;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Dispatcher.Dispatch(new LoadDropdownDataAction());
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (DropdownState.Value.Items != null && DropdownState.Value.SelectedItem != null)
+        {
+            _selectedItem = DropdownState.Value.SelectedItem;
+        }
+    }
+}
