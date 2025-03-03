@@ -1,4 +1,6 @@
-﻿using EnterpriseAppFluxor.Components.Code;
+﻿using EnterpriseApp.Domain.DataTransferObjects;
+using EnterpriseApp.Domain.Enums;
+using EnterpriseApp.Domain.Services;
 using Fluxor;
 
 namespace EnterpriseAppFluxor.Features.Globals.Store;

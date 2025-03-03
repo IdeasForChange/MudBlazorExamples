@@ -1,6 +1,6 @@
-﻿using EnterpriseAppFluxor.Features.Globals.Store;
+﻿using EnterpriseApp.Domain.DataTransferObjects;
 
-namespace EnterpriseAppFluxor.Components.Code;
+namespace EnterpriseApp.Domain.Services;
 
 public interface IBatchService
 {

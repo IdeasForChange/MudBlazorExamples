@@ -1,4 +1,6 @@
-﻿namespace EnterpriseAppFluxor.Features.Globals.Store;
+﻿using EnterpriseApp.Domain.Enums;
+
+namespace EnterpriseApp.Domain.DataTransferObjects;
 
 public class BatchDto
 {

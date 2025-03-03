@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseApp", "Enterprise
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseAppFluxor", "EnterpriseAppFluxor\EnterpriseAppFluxor.csproj", "{838214F0-35E6-436C-B6A0-5200AB3F7A32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseApp.WebAPI", "EnterpriseApp.WebAPI\EnterpriseApp.WebAPI.csproj", "{C8A50AA8-0873-477E-A233-D387A6091650}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseApp.Domain", "EnterpriseApp.Domain\EnterpriseApp.Domain.csproj", "{335F1C89-726E-42D2-953C-897C8EC89696}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{838214F0-35E6-436C-B6A0-5200AB3F7A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{838214F0-35E6-436C-B6A0-5200AB3F7A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{838214F0-35E6-436C-B6A0-5200AB3F7A32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A50AA8-0873-477E-A233-D387A6091650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A50AA8-0873-477E-A233-D387A6091650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A50AA8-0873-477E-A233-D387A6091650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A50AA8-0873-477E-A233-D387A6091650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335F1C89-726E-42D2-953C-897C8EC89696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335F1C89-726E-42D2-953C-897C8EC89696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335F1C89-726E-42D2-953C-897C8EC89696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335F1C89-726E-42D2-953C-897C8EC89696}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

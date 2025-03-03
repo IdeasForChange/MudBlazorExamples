@@ -1,0 +1,37 @@
+﻿@using EnterpriseAppFluxor.Features.BusinessDates.Store
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using MudBlazor
+
+@inherits FluxorComponent
+@inject IDispatcher Dispatcher
+@inject IState<BusinessDateState> BusinessDateState
+
+<MudDatePicker Label="Select Business Date"
+               @bind-Date="@SelectedDate"
+               DateFormat="dd/MM/yyyy"
+               Variant="Variant.Outlined"
+               Margin="Margin.Dense"
+               Elevation="3"
+               Clearable="true"
+               ShowToolbar="false" />
+
+@code {
+    private DateTime? _selectedDate;
+    public DateTime? SelectedDate
+    {
+        get => _selectedDate;
+        set
+        {
+            if (value == _selectedDate) return;
+            _selectedDate = value;
+            Dispatcher.Dispatch(new SetSelectedBusinessDateAction(_selectedDate));
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _selectedDate = BusinessDateState.Value.SelectedBusinessDate;
+        base.OnInitialized();
+    }
+}

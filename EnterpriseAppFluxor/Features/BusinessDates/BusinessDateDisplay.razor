@@ -1,0 +1,17 @@
+﻿@using EnterpriseAppFluxor.Features.BusinessDates.Store
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using MudBlazor
+
+@inherits FluxorComponent
+@inject IDispatcher Dispatcher
+@inject IState<BusinessDateState> BusinessDateState
+
+<MudField 
+    Label="@BusinessDateState.Value.SelectedBusinessDate.ToString()" 
+    Variant="Variant.Outlined"
+    Margin="Margin.Dense" />
+
+@code {
+
+}

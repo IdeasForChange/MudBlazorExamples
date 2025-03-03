@@ -1,6 +1,7 @@
-﻿namespace EnterpriseAppFluxor.Components.Code;
+﻿namespace EnterpriseApp.Domain.Services;
 
-using EnterpriseAppFluxor.Features.Globals.Store;
+using EnterpriseApp.Domain.DataTransferObjects;
+using EnterpriseApp.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

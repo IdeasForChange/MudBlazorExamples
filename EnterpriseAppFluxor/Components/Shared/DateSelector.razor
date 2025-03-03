@@ -7,9 +7,16 @@
 @inject IDispatcher Dispatcher
 @inject IState<AppState> State
 
-<MudDatePicker Label="Select Date" 
-@bind-Date="SelectedDate" 
-DateFormat="yyyy-MM-dd" />
+<MudDatePicker 
+    Label="Select Date" 
+    @bind-Date="SelectedDate" 
+    DateFormat="yyyy-MM-dd"
+    Variant="Variant.Outlined"
+    Margin="Margin.Dense"
+    Elevation="3"
+    Clearable="true"
+    ShowToolbar="false"
+    />
 
 @code {
     private DateTime? selectedDate;

@@ -1,4 +1,4 @@
-﻿namespace EnterpriseAppFluxor.Features.Globals.Store;
+﻿namespace EnterpriseApp.Domain.Enums;
 
 public enum BatchType
 {

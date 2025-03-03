@@ -1,9 +1,31 @@
 ﻿@page "/"
 @using EnterpriseAppFluxor.Components.Shared
+@using EnterpriseAppFluxor.Features.BusinessDates
 @using EnterpriseAppFluxor.Features.Dropdowns
 
-<DateSelector />
-<BatchDropdown />
+<MudGrid>
+    <MudItem xs="12">
+        <DateSelector />
+    </MudItem>
+
+    <MudItem xs="12">
+        <BatchDropdown />
+    </MudItem>
+
+    <MudItem xs="12">
+        <DropDown />
+    </MudItem>
+
+    <MudItem xs="12">
+        <BusinessDateSelector />
+        <br />
+        <BusinessDateDisplay />
+    </MudItem>
+
+</MudGrid>
 
 
-<DropDown />
+
+
+
+
