@@ -39,4 +39,36 @@ public class FakeBatchService : IBatchService
             return batches;
         });
     }
+
+    public Task<List<MarketRiskMarsBatchDto>> GetMarsBatchesAsync(DateTime? selectedDate)
+    {
+        // Simulate a delay to mimic an asynchronous operation
+        return Task.Delay(500).ContinueWith(_ =>
+        {
+            // Generate mock data based on the selected date
+            var batches = new List<MarketRiskMarsBatchDto>
+            {
+                new MarketRiskMarsBatchDto
+                {
+                    AsOfDate = selectedDate,
+                    BatchId = Guid.NewGuid().ToString(),
+                    BatchType = BatchType.Intraday
+                },
+                new MarketRiskMarsBatchDto
+                {
+                    AsOfDate = selectedDate,
+                    BatchId = Guid.NewGuid().ToString(),
+                    BatchType = BatchType.Final
+                },
+                new MarketRiskMarsBatchDto
+                {
+                    AsOfDate = selectedDate,
+                    BatchId = Guid.NewGuid().ToString(),
+                    BatchType = BatchType.IntradayFlash
+                }
+            };
+
+            return batches;
+        });
+    }
 }

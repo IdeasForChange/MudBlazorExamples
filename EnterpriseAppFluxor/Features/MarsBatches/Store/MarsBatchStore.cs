@@ -1,4 +1,6 @@
 ﻿using EnterpriseApp.Domain.DataTransferObjects;
+using EnterpriseApp.Domain.Services;
+using EnterpriseAppFluxor.Features.Dropdowns.Store;
 using Fluxor;
 
 namespace EnterpriseAppFluxor.Features.MarsBatches.Store;
@@ -29,11 +31,12 @@ public class MarsBatchStateFeature : Feature<MarsBatchState>
 
 // Actions
 public record SetSelectedMarsBatchAction(MarketRiskMarsBatchDto? MarsBatch);
-
+public record FetchMarsBatchesAction(DateTime? SelectedBusinessDate);
+public record SetMarsBatchesAction(List<MarketRiskMarsBatchDto> MarsBatches);
 
 
 // Reducers
-public static class marsBatchReducers
+public static class MarsBatchReducers
 {
     [ReducerMethod]
     public static MarsBatchState OnSetSelectedMarsBatchAction(MarsBatchState state, SetSelectedMarsBatchAction action)
@@ -43,6 +46,27 @@ public static class marsBatchReducers
             SelectedMarsBatch = action.MarsBatch
         };
     }
+
+    [ReducerMethod]
+    public static MarsBatchState OnSetMarsBatchesAction(MarsBatchState state, SetMarsBatchesAction action)
+    {
+        return state with
+        {
+            MarsBatches = action.MarsBatches
+        };
+    }
 }
 
-// Effeccts 
+// Effects 
+public class MarsBatchEffects(IBatchService service)
+{
+    [EffectMethod]
+    public async Task HandleFetchMarsBatchesAction(FetchMarsBatchesAction action, IDispatcher dispatcher)
+    {
+        var items = await service.GetMarsBatchesAsync(action.SelectedBusinessDate);
+        dispatcher.Dispatch(new SetMarsBatchesAction(items));
+
+        var selectedItem = items.First();
+        dispatcher.Dispatch(new SetSelectedMarsBatchAction(selectedItem));
+    }
+}

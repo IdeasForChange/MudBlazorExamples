@@ -1,0 +1,66 @@
+﻿@inherits FluxorComponent 
+
+@using EnterpriseApp.Domain.DataTransferObjects
+@using EnterpriseAppFluxor.Features.BusinessDates.Store
+@using EnterpriseAppFluxor.Features.MarsBatches.Store
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using MudBlazor
+
+@inject IDispatcher Dispatcher
+@inject IState<BusinessDateState> BusinessDateState
+@inject IState<MarsBatchState> MarsBatchState
+
+
+<MudSelect T="MarketRiskMarsBatchDto"
+Label="Select"
+Variant="Variant.Outlined"
+Dense="true"
+Margin="Margin.Dense"
+@bind-Value="_selectedMarsBatch"
+ToStringFunc="@GetBatchDisplayText">
+
+    @foreach (var batch in MarsBatchState.Value.MarsBatches)
+    {
+        <MudSelectItem Value="batch" />
+    }
+</MudSelect>
+
+@code {
+    private MarketRiskMarsBatchDto? _selectedMarsBatch;
+    public MarketRiskMarsBatchDto? SelectedBatch 
+    {
+        get => MarsBatchState.Value.SelectedMarsBatch;
+        set 
+        {
+            if (value == _selectedMarsBatch) return;
+            _selectedMarsBatch = value;
+            Dispatcher.Dispatch(new SetSelectedMarsBatchAction(_selectedMarsBatch));
+        } 
+    }
+
+    private string GetBatchDisplayText(MarketRiskMarsBatchDto? batch)
+    {
+        if (batch == null)
+        {
+            return string.Empty;
+        }
+        return $"{batch.AsOfDate:yyyy-MM-dd} - {batch.BatchId} - [{batch.BatchType}]";
+    }
+
+    protected override void OnInitialized()
+    {
+        SubscribeToAction<SetSelectedBusinessDateAction>(OnSetSelectedBusinessDateAction);
+
+        if (!MarsBatchState.Value.MarsBatches.Any())
+        {
+            Dispatcher.Dispatch(new FetchMarsBatchesAction(BusinessDateState.Value.SelectedBusinessDate));
+        }
+        base.OnInitialized();
+    }
+
+    private void OnSetSelectedBusinessDateAction(SetSelectedBusinessDateAction action)
+    {
+        Dispatcher.Dispatch(new FetchMarsBatchesAction(BusinessDateState.Value.SelectedBusinessDate));
+    }
+}

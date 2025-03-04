@@ -21,18 +21,18 @@
                             ResetValueOnEmptyText="true" />
     </MudItem>
         <MudItem xs="6">
-        <MudSelect T="BatchDto"
-                    Label="Select"
-                    Variant="Variant.Outlined"
-                    Dense="true"
-                    Margin="Margin.Dense"
-                    @bind-Value="_selectedBatch"
-                    ToStringFunc="@GetBatchDisplayText">
-            @foreach (var batch in State.Value.Batches)
-            {
-                <MudSelectItem Value="batch" />
-            }
-        </MudSelect>
+            <MudSelect T="BatchDto"
+                        Label="Select"
+                        Variant="Variant.Outlined"
+                        Dense="true"
+                        Margin="Margin.Dense"
+                        @bind-Value="_selectedBatch"
+                        ToStringFunc="@GetBatchDisplayText">
+                @foreach (var batch in State.Value.Batches)
+                {
+                    <MudSelectItem Value="batch" />
+                }
+            </MudSelect>
         </MudItem>
 </MudGrid>
 
@@ -47,7 +47,7 @@
         if (batch == null)
             return string.Empty;
 
-        return $"{batch.BatchDate:yyyy-MM-dd} - {batch.BatchType} - {batch.BatchId}";
+        return $"{batch.BatchDate:yyyy-MM-dd} - {batch.BatchId} - [{batch.BatchType}]";
     }
 
     protected override void OnInitialized()
