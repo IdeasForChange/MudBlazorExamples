@@ -12,7 +12,7 @@ Label="Select"
 Variant="Variant.Outlined"
 Dense="true"
 Margin="Margin.Dense"
-@bind-Value="_selectedItem"     
+@bind-Value="@_selectedItem"     
 SearchFunc="@DataSearch"
 ToStringFunc="@( c => c == null ? null : $"{c.Name}")"
 ResetValueOnEmptyText="true" />

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseApp", "EnterpriseApp\EnterpriseApp.csproj", "{FE760FDA-414F-4ACC-970E-1EEDFB5264ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterpriseApp", "EnterpriseApp\EnterpriseApp.csproj", "{FE760FDA-414F-4ACC-970E-1EEDFB5264ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseAppFluxor", "EnterpriseAppFluxor\EnterpriseAppFluxor.csproj", "{838214F0-35E6-436C-B6A0-5200AB3F7A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterpriseAppFluxor", "EnterpriseAppFluxor\EnterpriseAppFluxor.csproj", "{838214F0-35E6-436C-B6A0-5200AB3F7A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseApp.WebAPI", "EnterpriseApp.WebAPI\EnterpriseApp.WebAPI.csproj", "{C8A50AA8-0873-477E-A233-D387A6091650}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterpriseApp.WebAPI", "EnterpriseApp.WebAPI\EnterpriseApp.WebAPI.csproj", "{C8A50AA8-0873-477E-A233-D387A6091650}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseApp.Domain", "EnterpriseApp.Domain\EnterpriseApp.Domain.csproj", "{335F1C89-726E-42D2-953C-897C8EC89696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterpriseApp.Domain", "EnterpriseApp.Domain\EnterpriseApp.Domain.csproj", "{335F1C89-726E-42D2-953C-897C8EC89696}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

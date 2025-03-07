@@ -1,0 +1,92 @@
+﻿@using EnterpriseAppFluxor.Features.BusinessDates.Store
+@using EnterpriseAppFluxor.Features.ComplexDropDown.Store
+@using Fluxor
+@using MudBlazor
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inject IDispatcher Dispatcher
+@inject IState<BusinessDateState> BusinessDateState
+@inject IState<DropDownState> DropDownState
+
+<MudSelect T="LargeComplexObject" 
+           Label="Select an item (Complex)" 
+           Dense="true"
+           Margin="Margin.Dense"
+           Variant="Variant.Outlined"
+           @bind-Value="@_selectedItem"
+           ToStringFunc="@GetBatchDisplayText"
+           Comparer="_comparer" >
+    @if (DropDownState.Value.Items != null)
+    {
+        @foreach (var item in DropDownState.Value.Items)
+        {
+            <MudSelectItem Value="@item" />
+        }
+    }
+</MudSelect>
+<MudField Label="@GetBatchDisplayText(_selectedItem)"
+          Variant="Variant.Outlined"
+          Margin="Margin.Dense" />
+
+
+@code {
+    // Custom comparer for ComplexObject
+    private readonly ComplexObjectComparer _comparer = new();
+    private LargeComplexObject? _selectedItem;
+    private DateTime? _selectedDate;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SubscribeToAction<SetSelectedBusinessDateAction>(OnSetSelectedBusinessDateAction);
+        SubscribeToAction<SetSelectedItemAction>(OnSetSelectedItemAction);
+
+        if (DropDownState.Value.Items == null || DropDownState.Value.Items.Any())
+        {
+            Dispatcher.Dispatch(new LoadDropDownDataAction());
+        }
+    }
+
+    private void OnSetSelectedBusinessDateAction(SetSelectedBusinessDateAction action)
+    {
+        Dispatcher.Dispatch(new LoadDropDownDataAction());
+    }
+
+    private void OnSetSelectedItemAction(SetSelectedItemAction action)
+    {
+        _selectedItem = DropDownState.Value.SelectedItem;
+        StateHasChanged();
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (DropDownState.Value.Items != null && DropDownState.Value.SelectedItem != null)
+        {
+            _selectedItem = DropDownState.Value.SelectedItem;
+        }
+    }
+
+    private string GetBatchDisplayText(LargeComplexObject? batch)
+    {
+        if (batch == null)
+            return string.Empty;
+
+        return $"{batch.BatchDate:yyyy-MM-dd} - {batch.BatchId} - [{batch.BatchType}]";
+    }
+
+    // Custom comparer for ComplexObject
+    private class ComplexObjectComparer : IEqualityComparer<LargeComplexObject>
+    {
+        public bool Equals(LargeComplexObject? x, LargeComplexObject? y)
+        {
+            if (x is null || y is null) return false;
+            return x.BatchId == y.BatchId; // Use Id for equality comparison
+        }
+
+        public int GetHashCode(LargeComplexObject obj)
+        {
+            return obj.BatchId.GetHashCode();
+        }
+    }
+}

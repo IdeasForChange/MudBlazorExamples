@@ -3,6 +3,7 @@
 @using EnterpriseAppFluxor.Features.BusinessDates
 @using EnterpriseAppFluxor.Features.Dropdowns
 @using EnterpriseAppFluxor.Features.MarsBatches
+@using EnterpriseAppFluxor.Features.ComplexDropDown
 
 <MudGrid>
     <MudItem xs="12">
@@ -23,6 +24,10 @@
         <BusinessDateDisplay />
         <br />
         <MarsBatchSelector />
+    </MudItem>
+    
+    <MudItem xs="12">
+        <ComplexDropDown />
     </MudItem>
 
 </MudGrid>

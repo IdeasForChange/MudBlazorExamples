@@ -1,6 +1,5 @@
 ﻿using EnterpriseApp.Domain.DataTransferObjects;
 using EnterpriseApp.Domain.Services;
-using EnterpriseAppFluxor.Features.Dropdowns.Store;
 using Fluxor;
 
 namespace EnterpriseAppFluxor.Features.MarsBatches.Store;
@@ -13,7 +12,7 @@ public record MarsBatchState
     public List<MarketRiskMarsBatchDto> MarsBatches { get; set; } = [];
 }
 
-// Featue 
+// Feature 
 public class MarsBatchStateFeature : Feature<MarsBatchState>
 {
     public override string GetName() => nameof(MarsBatchState);

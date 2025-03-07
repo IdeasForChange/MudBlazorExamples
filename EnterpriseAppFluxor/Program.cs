@@ -1,6 +1,7 @@
 using ApexCharts;
 using EnterpriseApp.Domain.Services;
 using EnterpriseAppFluxor.Components;
+using EnterpriseAppFluxor.Features.ComplexDropDown.Store;
 using EnterpriseAppFluxor.Features.Dropdowns.Store;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
@@ -28,6 +29,7 @@ namespace EnterpriseAppFluxor
 
             builder.Services.AddScoped<IBatchService, FakeBatchService>();
             builder.Services.AddScoped<IComplexObjectService, ComplexObjectService>();
+            builder.Services.AddScoped<ILargeComplexObjectService, LargeComplexObjectService>();
 
             var app = builder.Build();
 
