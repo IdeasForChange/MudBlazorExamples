@@ -1,0 +1,67 @@
+﻿@using ApexCharts
+@using EnterpriseApp.Domain.Models
+@using EnterpriseApp.Domain.Services
+@using EnterpriseAppFluxor.Features.BusinessDates.Store
+@using EnterpriseAppFluxor.Features.MarsBatches.Store
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+
+@inherits FluxorComponent
+@inject IState<BusinessDateState> BusinessDateState
+@inject IState<MarsBatchState> MarsBatchState
+@inject IBatchService BatchService
+
+<MudPaper Height="400px" Width="100%" Elevation="4" Class="pa-2">
+
+    <ApexChart @ref="_chart"
+               TItem="DataPointX"
+               Title="@Title"
+               Options="@ChartOptions">
+
+        <ApexPointSeries TItem="DataPointX"
+                         Items="Data"
+                         Name="Net Profit"
+                         SeriesType="@SeriesType"
+                         XValue="e => e.Label"
+                         YValue="e=> e.Value"
+                         ShowDataLabels />
+
+    </ApexChart>
+
+</MudPaper>
+
+@code {
+    private List<DataPointX> Data = new();
+    private ApexChartOptions<DataPointX> ChartOptions = new();
+
+    [Parameter]
+    public SeriesType SeriesType { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    public required ApexChart<DataPointX> _chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        SubscribeToAction<SetSelectedMarsBatchAction>(OnSetSelectedMarsBatchAction);
+    }
+
+    private void OnSetSelectedMarsBatchAction(SetSelectedMarsBatchAction action)
+    {
+        _ = RefreshChart();
+    }
+
+    private async Task RefreshChart()
+    {
+        // Fetch fake data based on the selected date
+        Data = await BatchService.GetDataAsync(BusinessDateState.Value.SelectedBusinessDate, MarsBatchState.Value.SelectedMarsBatch.BatchType.ToString());
+
+        //ChartOptions.Theme.Mode = IsDarkMode ? Mode.Dark : Mode.Light;
+
+        await InvokeAsync(StateHasChanged);
+        await _chart.UpdateSeriesAsync(true);
+    }
+}

@@ -6,7 +6,7 @@
 @using EnterpriseAppFluxor.Features.ComplexDropDown
 
 <MudGrid>
-    <MudItem xs="12">
+@*     <MudItem xs="12">
         <DateSelector />
     </MudItem>
 
@@ -16,19 +16,25 @@
 
     <MudItem xs="12">
         <DropDown />
-    </MudItem>
+    </MudItem> *@
 
-    <MudItem xs="12">
+    <MudItem xs="12" sm="12">
         <BusinessDateSelector />
-        <br />
-        <BusinessDateDisplay />
-        <br />
+        @* 
+        <BusinessDateDisplay /> *@
         <MarsBatchSelector />
     </MudItem>
-    
-    <MudItem xs="12">
-        <ComplexDropDown />
+
+    <MudItem xs="12" sm="6">
+        <ChartControl SeriesType="SeriesType.Bar" Title="Stock Price Trends" />
     </MudItem>
+    <MudItem xs="12" sm="6">
+        <ChartControl SeriesType="SeriesType.Pie" />
+    </MudItem>
+    
+@*     <MudItem xs="12">
+        <ComplexDropDown />
+    </MudItem> *@
 
 </MudGrid>
 

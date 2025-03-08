@@ -17,16 +17,19 @@ Label="Select"
 Variant="Variant.Outlined"
 Dense="true"
 Margin="Margin.Dense"
-@bind-Value="_selectedMarsBatch"
-ToStringFunc="@GetBatchDisplayText">
+@bind-Value="@_selectedMarsBatch"
+ToStringFunc="@GetBatchDisplayText"
+Comparer="_comparer">
 
     @foreach (var batch in MarsBatchState.Value.MarsBatches)
     {
-        <MudSelectItem Value="batch" />
+        <MudSelectItem Value="@batch" />
     }
 </MudSelect>
 
 @code {
+    private readonly MarketRiskMarsBatchComparer _comparer = new();
+
     private MarketRiskMarsBatchDto? _selectedMarsBatch;
     public MarketRiskMarsBatchDto? SelectedBatch 
     {
@@ -50,6 +53,7 @@ ToStringFunc="@GetBatchDisplayText">
 
     protected override void OnInitialized()
     {
+        SubscribeToAction<SetSelectedMarsBatchAction>(OnSetSelectedMarsBatchAction);
         SubscribeToAction<SetSelectedBusinessDateAction>(OnSetSelectedBusinessDateAction);
 
         if (!MarsBatchState.Value.MarsBatches.Any())
@@ -62,5 +66,26 @@ ToStringFunc="@GetBatchDisplayText">
     private void OnSetSelectedBusinessDateAction(SetSelectedBusinessDateAction action)
     {
         Dispatcher.Dispatch(new FetchMarsBatchesAction(BusinessDateState.Value.SelectedBusinessDate));
+    }
+
+    public void OnSetSelectedMarsBatchAction(SetSelectedMarsBatchAction action)
+    {
+        _selectedMarsBatch = MarsBatchState.Value.SelectedMarsBatch;
+        StateHasChanged();
+    }
+
+    // Custom comparer for MarketRiskMarsBatchDto
+    private class MarketRiskMarsBatchComparer : IEqualityComparer<MarketRiskMarsBatchDto>
+    {
+        public bool Equals(MarketRiskMarsBatchDto? x, MarketRiskMarsBatchDto? y)
+        {
+            if (x is null || y is null) return false;
+            return x.BatchId == y.BatchId; // Use Id for equality comparison
+        }
+
+        public int GetHashCode(MarketRiskMarsBatchDto obj)
+        {
+            return obj.BatchId.GetHashCode();
+        }
     }
 }

@@ -6,13 +6,13 @@
 
 @* Required *@
 <MudThemeProvider IsDarkMode="@DateStateService.IsDarkMode" @rendermode="InteractiveServer" />
-<MudPopoverProvider />
+<MudPopoverProvider @rendermode="InteractiveServer" />
 
 @* Needed for dialogs *@
-<MudDialogProvider  />
+<MudDialogProvider @rendermode="InteractiveServer" />
 
 @* Needed for snackbars *@
-<MudSnackbarProvider />
+<MudSnackbarProvider @rendermode="InteractiveServer" />
 
 <MudLayout>
     <MudAppBar Elevation="25">
@@ -29,7 +29,7 @@
         <NavMenu />
     </MudDrawer>
 
-    <MudContainer Class="d-flex align-center" Style="height: 100vh;">
+    <MudContainer Class="d-flex align-center" Style="margin-top: 80px">
         @Body
     </MudContainer>
 </MudLayout>

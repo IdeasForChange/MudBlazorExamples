@@ -1,4 +1,5 @@
 ﻿using EnterpriseApp.Domain.DataTransferObjects;
+using EnterpriseApp.Domain.Enums;
 using EnterpriseApp.Domain.Services;
 using Fluxor;
 
@@ -29,8 +30,8 @@ public class MarsBatchStateFeature : Feature<MarsBatchState>
 }
 
 // Actions
-public record SetSelectedMarsBatchAction(MarketRiskMarsBatchDto? MarsBatch);
 public record FetchMarsBatchesAction(DateTime? SelectedBusinessDate);
+public record SetSelectedMarsBatchAction(MarketRiskMarsBatchDto? MarsBatch);
 public record SetMarsBatchesAction(List<MarketRiskMarsBatchDto> MarsBatches);
 
 
@@ -65,7 +66,7 @@ public class MarsBatchEffects(IBatchService service)
         var items = await service.GetMarsBatchesAsync(action.SelectedBusinessDate);
         dispatcher.Dispatch(new SetMarsBatchesAction(items));
 
-        var selectedItem = items.First();
+        var selectedItem = items.FirstOrDefault(p => p.BatchType == BatchType.Final);
         dispatcher.Dispatch(new SetSelectedMarsBatchAction(selectedItem));
     }
 }
