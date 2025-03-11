@@ -1,8 +1,16 @@
-﻿@inherits FluxorLayout
+﻿
+
+@inherits FluxorLayout
 @inject IApexChartService ApexChartService 
 @using ApexCharts
+@using EnterpriseAppFluxor.Features.Theme.Store
+@using Fluxor
 @using Fluxor.Blazor.Web.Components
 @using MudBlazor
+
+@inject IState<ThemeState> ThemeState
+@inject NavigationManager NavigationManager
+@inject IDispatcher Dispatcher
 
 @* Required *@
 <MudThemeProvider @rendermode="InteractiveServer" />
@@ -15,23 +23,21 @@
 <MudSnackbarProvider @rendermode="InteractiveServer" />
 
 <MudLayout>
-    <MudAppBar Elevation="25">
-        <MudLink Href="/" Color="MudBlazor.Color.Inherit">Harmony</MudLink>
-        <MudToolBar Gutters="false">
-            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="MudBlazor.Color.Inherit" Class="ml-3" />
-        </MudToolBar>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Inherit" Edge="Edge.Start" OnClick="@((e) => drawerOpen = !drawerOpen)" />
+        <MudText Typo="Typo.h6"><MudButton Variant="Variant.Text" OnClick="NavigateHome" Color="MudBlazor.Color.Inherit">Trackor</MudButton></MudText>
         <MudSpacer />
-        <MudSwitch Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="MudBlazor.Color.Inherit" Edge="Edge.End" />
+        <MudIconButton Icon="@themeIcon" Color="MudBlazor.Color.Inherit" OnClick="ToggleThemeMode" Class="mr-3" />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="MudBlazor.Color.Inherit" Link="https://github.com/eric-king/trackor/" Target="_blank" />
     </MudAppBar>
-
-    <MudDrawer Variant="@DrawerVariant.Persistent" Elevation="5">
+    <MudDrawer @bind-Open="drawerOpen" Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Always" Elevation="6">
         <NavMenu />
     </MudDrawer>
-
-    <MudContainer Class="d-flex align-center" Style="margin-top: 85px;">
-        @Body
-    </MudContainer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+            @Body
+        </MudContainer>
+    </MudMainContent>
 </MudLayout>
 
 <div id="blazor-error-ui">
@@ -41,6 +47,11 @@
 </div>
 
 @code {
+    bool themeLoading = true;
+    bool drawerOpen = false;
+    bool isDarkMode = false;
+    string themeIcon = Icons.Material.Filled.DarkMode;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         var globalOptions = new ApexChartBaseOptions
@@ -73,4 +84,23 @@
 
         await ApexChartService.SetGlobalOptionsAsync(globalOptions, true);
     }
+
+    protected override void OnInitialized()
+    {
+        SubscribeToAction<ThemeSetDarkModeAction>(SetDarkMode);
+        //Dispatcher.Dispatch(new DatabaseSetUpDbAction());
+        base.OnInitialized();
+    }
+
+    private void NavigateHome() => NavigationManager.NavigateTo("/");
+    private void ToggleThemeMode() => Dispatcher.Dispatch(new ThemeToggleDarkModeAction());
+
+    private void SetDarkMode(ThemeSetDarkModeAction action)
+    {
+        themeLoading = false;
+        isDarkMode = action.IsDarkMode;
+        themeIcon = isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode;
+        InvokeAsync(StateHasChanged);
+    }
+
 }

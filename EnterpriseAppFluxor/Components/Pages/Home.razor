@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using EnterpriseAppFluxor.Components.Shared
+@using EnterpriseAppFluxor.Features.AutoRefresh
 @using EnterpriseAppFluxor.Features.BusinessDates
 @using EnterpriseAppFluxor.Features.Dropdowns
 @using EnterpriseAppFluxor.Features.MarsBatches
@@ -25,16 +26,22 @@
         <MarsBatchSelector />
     </MudItem>
 
-    <MudItem xs="12" sm="6">
+    <MudItem xs="12" sm="12">
         <ChartControl SeriesType="SeriesType.Bar" Title="Stock Price Trends" />
     </MudItem>
-    <MudItem xs="12" sm="6">
-        <ChartControl SeriesType="SeriesType.Pie" />
+    <MudItem xs="12" sm="12">
+        <ChartControl SeriesType="SeriesType.Line" />
     </MudItem>
+
+    <MudItem xs="12">
+        <NoRecordsContentExample />
+    </MudItem>
+
+     <MudItem xs="12" sm="6">
+         <AutoRefreshData />
+     </MudItem>
     
-@*     <MudItem xs="12">
-        <ComplexDropDown />
-    </MudItem> *@
+
 
 </MudGrid>
 

@@ -1,0 +1,20 @@
+﻿@using EnterpriseAppFluxor.Features.AutoRefresh.Store
+<MudDataGrid Items="@emptyList" T="DataItem">
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="ID" />
+        <PropertyColumn Property="x => x.Name" Title="Name" />
+    </Columns>
+    <NoRecordsContent>
+        <MudContainer>
+            <MudIcon Icon="@Icons.Material.Filled.Info" Color="MudBlazor.Color.Info" />
+            <MudText Typo="Typo.h6" Color="MudBlazor.Color.Secondary">No data available. Try refreshing the page.</MudText>
+            <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary">Refresh</MudButton>
+        </MudContainer>
+    </NoRecordsContent>
+</MudDataGrid>
+
+@code {
+    private List<DataItem> emptyList = new List<DataItem>();
+
+    private RenderFragment NoRecordsTemplate => @<MudText Typo="Typo.h6" Color="MudBlazor.Color.Secondary">No records found. Please check back later!</MudText>;
+}

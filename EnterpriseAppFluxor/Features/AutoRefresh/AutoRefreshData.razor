@@ -1,0 +1,81 @@
+﻿@inherits FluxorComponent
+@implements IDisposable
+
+@using EnterpriseAppFluxor.Features.AutoRefresh.Store
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using MudBlazor
+
+@inject IDispatcher Dispatcher
+@inject IState<DataState> DataState
+@inject ISnackbar Snackbar
+
+<MudDataGrid Items="@DataState.Value.Data" Hover="true" Striped="true">
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="ID" />
+        <PropertyColumn Property="x => x.Name" Title="Name" />
+    </Columns>
+</MudDataGrid>
+
+<MudButton OnClick="RefreshData" Color="Color.Primary" Variant="Variant.Filled" Class="ma-3">
+    Refresh Data. Next refresh in: <strong>@_countdownSeconds</strong> seconds
+</MudButton>
+
+@code {
+    private Timer _refreshTimer;
+    private Timer _countdownTimer;
+    private int _countdownSeconds = 60;
+
+    protected override void OnInitialized()
+    {
+        // Configure Snackbar to appear in the bottom-left corner
+        Snackbar.Configuration.PositionClass = "mud-snackbar-location-bottom-right";
+        Snackbar.Configuration.SnackbarVariant = Variant.Filled;
+        Snackbar.Configuration.IconSize = Size.Medium;
+        Snackbar.Configuration.MaxDisplayedSnackbars = 3; // Optional: Limit the number of visible snackbars
+
+        base.OnInitialized();
+        Dispatcher.Dispatch(new FetchDataAction());
+
+        // Set up the refresh timer (every 60 seconds)
+        _refreshTimer = new Timer(RefreshDataCallback, null, 60000, 60000);
+
+        // Set up the countdown timer (every 1 second)
+        _countdownTimer = new Timer(UpdateCountdown, null, 1000, 1000);
+    }
+
+    private void RefreshDataCallback(object state)
+    {
+        RefreshUI("Automatically");
+    }
+
+    private void UpdateCountdown(object state)
+    {
+        if (_countdownSeconds > 0)
+        {
+            _countdownSeconds--;
+            InvokeAsync(StateHasChanged); // Update the UI
+        }
+    }
+
+    private void RefreshData()
+    {
+        RefreshUI("Manually");
+    }
+
+    private void RefreshUI(string message)
+    {
+        Dispatcher.Dispatch(new FetchDataAction());
+        Snackbar.Add($"Data refreshed {message}.", Severity.Info);
+
+        // Reset the countdown
+        _countdownSeconds = 60;
+        InvokeAsync(StateHasChanged); // Update the UI
+    }
+
+    public void Dispose()
+    {
+        _refreshTimer?.Dispose();
+        _countdownTimer?.Dispose();
+    }
+}
