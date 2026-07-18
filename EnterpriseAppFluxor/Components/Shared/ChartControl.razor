@@ -11,7 +11,7 @@
 @inject IState<MarsBatchState> MarsBatchState
 @inject IBatchService BatchService
 
-<MudPaper Height="400px" Width="100%" Elevation="4" Class="pa-2">
+<MudPaper Elevation="4" Class="pa-2" Style="max-width: 100vw; height: auto; max-height:400vh; width:auto;">
 
     <ApexChart @ref="_chart"
                TItem="DataPointX"

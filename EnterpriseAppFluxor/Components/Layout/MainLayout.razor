@@ -13,7 +13,7 @@
 @inject IDispatcher Dispatcher
 
 @* Required *@
-<MudThemeProvider @rendermode="InteractiveServer" />
+<MudThemeProvider @rendermode="InteractiveServer" IsDarkMode="@isDarkMode" />
 <MudPopoverProvider @rendermode="InteractiveServer" />
 
 @* Needed for dialogs *@
@@ -48,7 +48,7 @@
 
 @code {
     bool themeLoading = true;
-    bool drawerOpen = false;
+    bool drawerOpen = true;
     bool isDarkMode = false;
     string themeIcon = Icons.Material.Filled.DarkMode;
 
@@ -102,5 +102,4 @@
         themeIcon = isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode;
         InvokeAsync(StateHasChanged);
     }
-
 }
